@@ -23,6 +23,7 @@ get:
           type: string
           enum:
             - head
+            - head_v2
             - block
             - block_gossip
             - attestation
@@ -41,7 +42,6 @@ get:
             - execution_payload_available
             - execution_payload_bid
             - payload_attestation_message
-            - head_v2
   responses:
     "200":
       description: Opened SSE stream.
@@ -56,6 +56,11 @@ get:
               value: |
                 event: head
                 data: {"slot":"10", "block":"0x9a2fefd2fdb57f74993c7780ea5b9030d2897b615b89f808011ca5aebed54eaf", "state":"0x600e852a08c1200654ddf11025f1ceacb3c2e74bdd5c630cde0838b2591b69f9", "epoch_transition":false, "previous_duty_dependent_root":"0x5e0043f107cb57913498fbf2f99ff55e730bf1e151f02f221e977c91a90a0e91", "current_duty_dependent_root":"0x5e0043f107cb57913498fbf2f99ff55e730bf1e151f02f221e977c91a90a0e91", "execution_optimistic": false}
+            head_v2:
+              description: The node has finished processing, resulting in a new head. previous_epoch_dependent_root is `get_block_root_at_slot(state, compute_start_slot_at_epoch(epoch - 2) - 1)`, current_epoch_dependent_root is `get_block_root_at_slot(state, compute_start_slot_at_epoch(epoch - 1) - 1)` and next_epoch_dependent_root is `get_block_root_at_slot(state, compute_start_slot_at_epoch(epoch) - 1)`. All dependent roots use the genesis block root in the case of underflow.
+              value: |
+                event: head_v2
+                data: {"version": "gloas", "data":{"slot":"10", "block":"0x9a2fefd2fdb57f74993c7780ea5b9030d2897b615b89f808011ca5aebed54eaf", "state":"0x600e852a08c1200654ddf11025f1ceacb3c2e74bdd5c630cde0838b2591b69f9", "epoch_transition":false, "previous_epoch_dependent_root":"0x5e0043f107cb57913498fbf2f99ff55e730bf1e151f02f221e977c91a90a0e91", "current_epoch_dependent_root":"0x5e0043f107cb57913498fbf2f99ff55e730bf1e151f02f221e977c91a90a0e91", "next_epoch_dependent_root":"0x5e0043f107cb57913498fbf2f99ff55e730bf1e151f02f221e977c91a90a0e91", "execution_optimistic": false}}
             block:
               description: The node has received a block (from P2P or API) that is successfully imported on the fork-choice `on_block` handler
               value: |
@@ -170,12 +175,7 @@ get:
               description: The node has received a `PayloadAttestationMessage` that passes validation rules of the `payload_attestation_message` topic
               value: |
                 event: payload_attestation_message
-                data: {"version":"gloas", "data":{"validator_index": "123", "data": {"beacon_block_root": "0x9a2fefd2fdb57f74993c7780ea5b9030d2897b615b89f808011ca5aebed54eaf", "slot": "10", "payload_present": true, "blob_data_available": true}, "signature": "0x1b66ac1fb663c9bc59509846d6ec05345bd908eda73e670af888da41af171505cc411d61252fb6cb3fa0017b679f8bb2305b26a285fa2737f175668d0dff91cc1b66ac1fb663c9bc59509846d6ec05345bd908eda73e670af888da41af171505"}}
-            head_v2:
-              description: The node has finished processing, resulting in a new head. previous_epoch_dependent_root is `get_block_root_at_slot(state, compute_start_slot_at_epoch(epoch - 2) - 1)`, current_epoch_dependent_root is `get_block_root_at_slot(state, compute_start_slot_at_epoch(epoch - 1) - 1)` and next_epoch_dependent_root is `get_block_root_at_slot(state, compute_start_slot_at_epoch(epoch) - 1)`. All dependent roots use the genesis block root in the case of underflow.
-              value: |
-                event: head_v2
-                data: {"version": "gloas", "data":{"slot":"10", "block":"0x9a2fefd2fdb57f74993c7780ea5b9030d2897b615b89f808011ca5aebed54eaf", "state":"0x600e852a08c1200654ddf11025f1ceacb3c2e74bdd5c630cde0838b2591b69f9", "epoch_transition":false, "previous_epoch_dependent_root":"0x5e0043f107cb57913498fbf2f99ff55e730bf1e151f02f221e977c91a90a0e91", "current_epoch_dependent_root":"0x5e0043f107cb57913498fbf2f99ff55e730bf1e151f02f221e977c91a90a0e91", "next_epoch_dependent_root":"0x5e0043f107cb57913498fbf2f99ff55e730bf1e151f02f221e977c91a90a0e91", "execution_optimistic": false}}
+                data: {"version":"gloas", "data":{"validator_index": "123", "data": {"beacon_block_root": "0x9a2fefd2fdb57f74993c7780ea5b9030d2897b615b89f808011ca5aebed54eaf", "slot": "10", "payload_present": true, "blob_data_available": true}, "signature": "0x1b66ac1fb663c9bc59509846d6ec05345bd908eda73e670af888da41af171505cc411d61252fb6cb3fa0017b679f8bb2305b26a285fa2737f175668d0dff91cc1b66ac1fb663c9bc59509846d6ec05345bd908eda73e670af888da41af171505"}}     
     "400":
       description: "The topics supplied could not be parsed"
       content:
