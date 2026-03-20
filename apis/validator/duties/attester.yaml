@@ -25,7 +25,7 @@ post:
 
     After Fulu:
 
-     - event.previous_duty_dependent_root when `compute_epoch_at_slot(event.slot) == epoch`
+     - event.previous_epoch_dependent_root when `compute_epoch_at_slot(event.slot) == epoch`
 
      - event.block otherwise
 
